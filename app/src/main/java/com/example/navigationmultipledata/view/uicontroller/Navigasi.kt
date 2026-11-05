@@ -21,3 +21,28 @@ enum class Navigasi {
     Formulir,
     Detail
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SiswaApp(
+    modifier: Modifier = Modifier,
+    viewModel: SiswaViewModel = viewModel(),
+    navController: NavHostController = rememberNavController()
+){
+    Scaffold(modifier = modifier) { isiRuang ->
+        val uiState = viewModel.statusUI.collectAsState()
+        NavHost(
+            navController = navController,
+            startDestination = Navigasi.Formulir.name,
+            modifier = Modifier.padding(isiRuang)
+        ){
+            composable(route = Navigasi.Formulir.name){
+                val konteks = LocalContext.current
+                FormSiswa(
+                    pilihanJK = JenisK.map { id -> konteks.resources.getString(id) },
+                    onSubmitButtonClicked = { listData ->
+                        viewModel.setSiswa(listData)
+                        navController.navigate(Navigasi.Detail.name)
+                    }
+                )
+            }
