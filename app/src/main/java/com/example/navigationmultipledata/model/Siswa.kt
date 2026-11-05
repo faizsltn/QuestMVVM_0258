@@ -1,0 +1,4 @@
+package com.example.navigationmultipledata.model
+
+data class Siswa(
+    val nama : String = "",
